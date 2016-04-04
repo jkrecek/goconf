@@ -2,8 +2,8 @@ package goconf
 
 import (
 	"golang.org/x/crypto/openpgp"
-	"os"
 	"io"
+	"os"
 )
 
 type EncryptionStructure struct {

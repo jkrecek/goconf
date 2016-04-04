@@ -1,10 +1,10 @@
 package goconf
 
 import (
-	"os"
+	"encoding/json"
 	"io/ioutil"
 	"log"
-	"encoding/json"
+	"os"
 	"reflect"
 	"strconv"
 )
@@ -47,7 +47,6 @@ func loadFile(fileName string) (fileBytes []byte, err error) {
 
 	return
 }
-
 
 func RuntimeTest(configObject interface{}) {
 	v := reflect.Indirect(reflect.ValueOf(configObject))

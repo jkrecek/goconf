@@ -2,8 +2,8 @@ package goconf
 
 import (
 	"github.com/jkrecek/goftp"
-	"time"
 	"math"
+	"time"
 )
 
 type FtpConnection struct {

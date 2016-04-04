@@ -3,8 +3,8 @@ package goconf
 import "testing"
 
 type testConfig struct {
-	IsDebug bool `json:"is_debug"`
-	Mysql   *MysqlConnection `json:"mysql" testable:"true"`
+	IsDebug     bool             `json:"is_debug"`
+	Mysql       *MysqlConnection `json:"mysql" testable:"true"`
 	MysqlNoTest *MysqlConnection `json:"mysql_no_test" testable:"false"`
 }
 

@@ -1,11 +1,11 @@
 package goconf
 
 import (
-	"path/filepath"
-	"os"
-	"strings"
 	"log"
+	"os"
+	"path/filepath"
 	"regexp"
+	"strings"
 )
 
 var (
