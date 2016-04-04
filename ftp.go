@@ -37,3 +37,14 @@ func (fc *FtpConnection) GetConnection() (ftp *goftp.FTP, err error) {
 
 	return
 }
+
+func (fc *FtpConnection) RuntimeTest() (err error, fatal bool) {
+	conn, err := fc.GetConnection()
+	if err != nil {
+		fatal = true
+		return
+	}
+
+	conn.Close()
+	return
+}
