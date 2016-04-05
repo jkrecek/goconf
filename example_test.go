@@ -4,11 +4,11 @@ import "testing"
 
 type testConfig struct {
 	IsDebug     bool             `json:"is_debug"`
-	Mysql       *MysqlConnection `json:"mysql" testable:"true"`
+	Mysql       *MysqlConnection `json:"mysql" testable:"false"`
 	MysqlNoTest *MysqlConnection `json:"mysql_no_test" testable:"false"`
 }
 
-// TODO must somehow use moc mysql connection
+// TODO must somehow use mock mysql connection
 var exampleConfig = []byte(`
 {
   "IsDebug"           : true,
