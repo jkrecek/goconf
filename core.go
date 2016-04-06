@@ -57,13 +57,24 @@ func RuntimeTest(configObject interface{}) {
 			continue
 		}
 
-		method := v.Field(i).MethodByName(TestMethodName)
+		kindField := v.Field(i).Kind()
+		if kindField != reflect.Struct && kindField != reflect.Ptr {
+			log.Printf("Warning: Config property `%s` cannot be marked as testable, only `struct` and `ptr` allowed.\n", typeField.Name)
+			continue
+		}
+
+		ptrField := v.Field(i)
+		if ptrField.Kind() == reflect.Struct {
+			ptrField = ptrField.Addr()
+		}
+
+		method := ptrField.MethodByName(TestMethodName)
 		if !method.IsValid() {
 			log.Printf("Warning: Config property `%s` marked as testable, but no method `%s` was found.\n", typeField.Name, TestMethodName)
 			continue
 		}
 
-		methodType, _ := v.Field(i).Type().MethodByName(TestMethodName)
+		methodType, _ := ptrField.Type().MethodByName(TestMethodName)
 		methodTypeType := methodType.Type
 		if methodTypeType.NumOut() != 2 || methodTypeType.Out(0) != reflect.TypeOf((*error)(nil)).Elem() || methodTypeType.Out(1) != reflect.TypeOf((*bool)(nil)).Elem() {
 			log.Printf("Warning: Method `%s` in property `%s` has invalid parameters, should be (bool, error).", TestMethodName, typeField.Name)

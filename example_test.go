@@ -4,8 +4,9 @@ import "testing"
 
 type testConfig struct {
 	IsDebug     bool             `json:"is_debug"`
-	Mysql       *MysqlConnection `json:"mysql" testable:"false"`
 	MysqlNoTest *MysqlConnection `json:"mysql_no_test" testable:"false"`
+	Mysql         *MysqlConnection `json:"mysql" testable:"true"`
+	MysqlStruct   MysqlConnection  `json:"mysql_struct" tastable:"true"`
 }
 
 // TODO must somehow use mock mysql connection
