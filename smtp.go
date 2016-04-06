@@ -18,9 +18,9 @@ func (sc *SmtpConnection) GetConnectionString() string {
 }
 
 type EmailMessage interface {
-	From() string
-	To() []string
-	Bytes() []byte
+	GetFrom() string
+	GetTo() []string
+	GetBytes() []byte
 }
 
 func (sc *SmtpConnection) SendEmail(em EmailMessage) error {
@@ -29,6 +29,6 @@ func (sc *SmtpConnection) SendEmail(em EmailMessage) error {
 		auth = smtp.PlainAuth("", sc.Username, sc.Password, sc.Host)
 	}
 
-	err := smtp.SendMail(sc.GetConnectionString(), auth, em.From(), em.To(), em.Bytes())
+	err := smtp.SendMail(sc.GetConnectionString(), auth, em.GetFrom(), em.GetTo(), em.GetBytes())
 	return err
 }
