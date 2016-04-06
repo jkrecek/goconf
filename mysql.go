@@ -7,6 +7,7 @@ import (
 	"database/sql"
 
 	_ "github.com/jkrecek/mysql"
+	"sync"
 )
 
 type MysqlConnection struct {
@@ -14,6 +15,9 @@ type MysqlConnection struct {
 	User     string
 	Pass     string
 	Database string
+
+	instance *sql.DB
+	lock sync.Mutex
 }
 
 func (mc *MysqlConnection) getConnectionString() string {
@@ -27,7 +31,7 @@ func (mc *MysqlConnection) getConnectionString() string {
 	return fmt.Sprintf("%s:%s@%s(%s)/%s?parseTime=true", mc.User, mc.Pass, conType, mc.Address, mc.Database)
 }
 
-func (mc *MysqlConnection) GetDatabaseConnection() (db *sql.DB, err error) {
+func (mc *MysqlConnection) CreateConnection() (db *sql.DB, err error) {
 	db, err = sql.Open("mysql", mc.getConnectionString())
 	if err != nil {
 		return
@@ -37,8 +41,21 @@ func (mc *MysqlConnection) GetDatabaseConnection() (db *sql.DB, err error) {
 	return
 }
 
+func (mc *MysqlConnection) GetInstance() (*sql.DB, error) {
+	mc.lock.Lock()
+	defer mc.lock.Unlock()
+
+	var err error
+	if mc.instance == nil {
+		mc.instance, err = mc.CreateConnection()
+	}
+
+	return mc.instance, err
+}
+
+
 func (mc *MysqlConnection) RuntimeTest() (err error, fatal bool) {
-	conn, err := mc.GetDatabaseConnection()
+	conn, err := mc.CreateConnection()
 	if err != nil {
 		fatal = true
 		return
