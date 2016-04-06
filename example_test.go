@@ -9,8 +9,8 @@ type testConfig struct {
 	ExampleString string           `json:"example_str" default:"empty"`
 	ExampleInt    int              `json:"example_int" default:"50"`
 	ExampleInt20  int              `json:"example_int_20" default:"999"`
-	Mysql         *MysqlConnection `json:"mysql" testable:"true"`
-	MysqlStruct   MysqlConnection  `json:"mysql_struct" tastable:"true"`
+	Mysql         *MysqlConnection `json:"mysql" testable:"false"`
+	MysqlStruct   MysqlConnection  `json:"mysql_struct" tastable:"false"`
 	MysqlNoTest   MysqlConnection  `json:"mysql_no_test" testable:"false"`
 }
 
