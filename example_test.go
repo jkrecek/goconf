@@ -1,18 +1,21 @@
 package goconf
 
-import "testing"
+import (
+	"testing"
+)
 
 type testConfig struct {
-	IsDebug     bool             `json:"is_debug"`
-	MysqlNoTest *MysqlConnection `json:"mysql_no_test" testable:"false"`
+	ExampleBool   bool             `json:"example_bool" default:"true"`
+	ExampleString string           `json:"example_str" default:"empty"`
+	ExampleInt    int              `json:"example_int" default:"50"`
 	Mysql         *MysqlConnection `json:"mysql" testable:"true"`
 	MysqlStruct   MysqlConnection  `json:"mysql_struct" tastable:"true"`
+	MysqlNoTest   MysqlConnection  `json:"mysql_no_test" testable:"false"`
 }
 
 // TODO must somehow use mock mysql connection
 var exampleConfig = []byte(`
 {
-  "IsDebug"           : true,
   "Mysql"             : {
     "Address"   : "localhost:3306",
     "User"      : "root",
@@ -25,4 +28,17 @@ var exampleConfig = []byte(`
 func TestConfig(t *testing.T) {
 	configObj := &testConfig{}
 	LoadConfig(exampleConfig, configObj)
+
+	if configObj.ExampleBool == false {
+		t.Fatal("ExampleBool has unexpected value")
+	}
+
+	if configObj.ExampleString != "empty" {
+		t.Fatal("ExampleString has unexpected value")
+	}
+
+	if configObj.ExampleInt != 50 {
+		t.Fatal("ExampleInt has unexpected value")
+	}
+
 }

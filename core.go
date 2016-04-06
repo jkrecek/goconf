@@ -23,6 +23,8 @@ func LoadConfigFromFile(fileName string, configObject interface{}) {
 }
 
 func LoadConfig(configBytes []byte, configObject interface{}) {
+	LoadDefaults(configObject)
+
 	err := json.Unmarshal(configBytes, &configObject)
 	if err != nil {
 		log.Fatalf("Configuration file marshal error: %s", err)
@@ -46,6 +48,34 @@ func loadFile(fileName string) (fileBytes []byte, err error) {
 	}
 
 	return
+}
+
+func LoadDefaults(configObject interface{}) {
+	v := reflect.Indirect(reflect.ValueOf(configObject))
+
+	for i := 0; i < v.NumField(); i++ {
+		typeField := v.Type().Field(i)
+		defaultField := typeField.Tag.Get("default")
+		if len(defaultField) == 0 {
+			continue
+		}
+
+		switch v.Field(i).Kind() {
+		case reflect.Bool:
+			boolVal, err := strconv.ParseBool(defaultField)
+			if err == nil {
+				v.Field(i).SetBool(boolVal)
+			}
+		case reflect.Int:
+			intVal, err := strconv.ParseInt(defaultField, 10, 0)
+			if err == nil {
+				v.Field(i).SetInt(intVal)
+			}
+		case reflect.String:
+			v.Field(i).SetString(defaultField)
+		}
+
+	}
 }
 
 func RuntimeTest(configObject interface{}) {
