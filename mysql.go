@@ -17,7 +17,7 @@ type MysqlConnection struct {
 	Database string
 
 	instance *sql.DB
-	lock sync.Mutex
+	lock     sync.Mutex
 }
 
 func (mc *MysqlConnection) getConnectionString() string {
@@ -52,7 +52,6 @@ func (mc *MysqlConnection) GetInstance() (*sql.DB, error) {
 
 	return mc.instance, err
 }
-
 
 func (mc *MysqlConnection) RuntimeTest() (err error, fatal bool) {
 	conn, err := mc.CreateConnection()
