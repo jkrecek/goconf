@@ -93,6 +93,11 @@ func RuntimeTest(configObject interface{}) {
 			continue
 		}
 
+		if v.Field(i).IsNil() {
+			log.Fatalf("Warning: Config property `%s` marked as testable, but was not initialized.\n", typeField.Name)
+			continue
+		}
+
 		ptrField := v.Field(i)
 		if ptrField.Kind() == reflect.Struct {
 			ptrField = ptrField.Addr()
